@@ -1,10 +1,10 @@
-let empPayrollList;
+/*let empPayrollList;
 window.addEventListener('DOMContentLoaded',(event)=>{
     empPayrollList = getEmployeePayrollDataFromStorage();
     document.querySelector('.emp-count').textContent = empPayrollList.length;
     createInnerHTML();
+    localStorage.removeItem('editEmp');
 });
-
 const getEmployeePayrollDataFromStorage = () => {
     return localStorage.getItem("EmployeePayrollList") ?
         JSON.parse(localStorage.getItem("EmployeePayrollList")) :
@@ -49,4 +49,4 @@ function getDeptHTML(deptList) {
         <div class="dept-label">${dept}</div>`;
     }
     return deptHTML;
-}
+}*/
