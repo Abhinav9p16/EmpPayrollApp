@@ -1,4 +1,3 @@
-//home.js
 let isUpdate = false;
 let employeePayrollObj = {};
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -34,7 +33,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     salary.addEventListener('input', function () {
         output.textContent = salary.value;
     });
-    document.querySelector('#cancelButton').href = empProperties.home_page;
+    document.querySelector('#cancelButton').href = site_properties.home_page;
     checkForUpdate();
 }); 
 class EmployeePayrollData{
@@ -99,13 +98,33 @@ const save = (event) => {
     event.stopPropagation();
     try{
         setEmployeePayrollObject();
-        createAndUpdateStorage();
-        resetForm();
-        window.location.replace(empProperties.home_page);
+        if(site_properties.use_local_storage.match("true")) {
+            createAndUpdateStorage();
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        } else {
+            createOrUpdateEmployeePayroll();
+        };
     }catch(exception){
         console.error(exception);
         return;
     }
+}
+const createOrUpdateEmployeePayroll = () => {
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if(isUpdate) {
+        methodCall = "PUT";
+        postURL = postURL + "/" + employeePayrollObj.id.toString(); 
+    }
+    makeServiceCall(methodCall, postURL, true, employeePayrollObj)
+        .then(responseText => {
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        })
+        .catch(error => {
+            throw error;
+        });
 }
 
 function setEmployeePayrollObject() {
@@ -235,7 +254,7 @@ const resetForm = () => {
     setSelectedIndex('#day', 0);
     setSelectedIndex('#month', 0);
     setSelectedIndex('#year', 0);
-    localStorage.removeItem('editEmp');
+    //localStorage.removeItem('editEmp');
 }
 
 const unsetSelectedValue = (propertyValue) => {
@@ -284,18 +303,5 @@ function getEmpDataFromLocalStorage() {
         JSON.parse(localStorage.getItem("EmployeePayrollList")) :
         [];      
 }
-const checkName = (name) => {
-    let nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
-    if(!nameRegex.test(name))
-        throw 'Name is Incorrect!';
-}
 
-const checkStartDate = (startDate) => {
-    let now = new Date();
-    if(startDate > now) 
-        throw 'Start Date is a Future Date!';
-    var diff = Math.abs(now.getTime() - startDate.getTime());
-    if(diff / (1000 * 60 * 60 * 24) > 30)
-        throw "Start Date Is Beyond 30 Days!";
-} 	
 
