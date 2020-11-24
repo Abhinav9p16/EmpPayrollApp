@@ -7,6 +7,8 @@
   <link href="../css/empPayroll.css" rel="stylesheet">
   <title>Employee Payroll Form</title>
   <script defer src="../js/empPayroll.js"></script>
+  <script defer src="../js/empProperties.js"></script>
+  <script defer src="../js/empUtility.js"></script>
 </head>
 <body>
   <!-- UC1 -->
@@ -148,7 +150,7 @@
         <textarea id="notes" class="input" name="Notes" placeholder="Add notes.." style="height:100px"></textarea>
       </div>
       <div class="buttonParent">
-        <a href="./empPayrollApp.html" class="resetButton button cancelButton">Cancel</a>
+        <a href="./empPayrollApp.html" class="resetButton button cancelButton" id="cancelButton">Cancel</a>
         <div class="submit-reset">
           <button type="submit" class="button submitButton" id="submitButton">Submit</button>
           <button type="reset" class="resetButton button" id="resetButton">Reset</button>

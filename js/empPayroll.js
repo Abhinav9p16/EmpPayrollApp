@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
         try {
-            (new EmployeePayrollData()).name = name.value;
+            checkName(name.value);
             nameError.textContent = "";
         } catch (e) {
             nameError.textContent = e;
@@ -18,12 +18,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }); 
     const date = document.querySelector('#startDate');
     date.addEventListener('input', function() {
-        let startDate = new Array();
-        startDate.push(document.querySelector("#day").value);
-        startDate.push(document.querySelector("#month").value);
-        startDate.push(document.querySelector("#year").value);
+        let startDate = document.querySelector("#day").value + " " +
+                        document.querySelector("#month").value + " " +
+                        document.querySelector("#year").value;
         try {
-            (new EmployeePayrollData()).startDate = new Date(startDate[2],startDate[1],startDate[0]);
+            checkStartDate(new Date(Date.parse(startDate)));
             setTextValue('.date-error', "");
         } catch (e) {
             setTextValue('.date-error', e);
@@ -35,6 +34,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     salary.addEventListener('input', function () {
         output.textContent = salary.value;
     });
+    document.querySelector('#cancelButton').href = empProperties.home_page;
     checkForUpdate();
 }); 
 class EmployeePayrollData{
@@ -110,6 +110,7 @@ const save = (event) => {
 
 function setEmployeePayrollObject() {
     try {
+        if(!isUpdate) employeePayrollObj.id = createNewEmployeeId();
         employeePayrollObj._name = document.getElementById('name').value;
         employeePayrollObj._profilePic = getRadioValue(document.getElementsByName('profile'));
         employeePayrollObj._gender = getRadioValue(document.getElementsByName('gender'));
@@ -131,12 +132,14 @@ function setEmployeePayrollObject() {
 function createAndUpdateStorage() {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
     if(employeePayrollList){
-        let employeeData = employeePayrollList.find(empData => empData._id == employeePayrollObj._id);
-        if (!employeeData) employeePayrollList.push(createEmpData());
-        else{
+        let employeeData = employeePayrollList.
+                            find(empData => empData._id == employeePayrollObj._id);
+        if (!employeeData) {
+            employeePayrollList.push(employeePayrollObj);
+        } else{
             const index = employeePayrollList.map(empData => empData._id)
                                              .indexOf(employeeData._id);
-            employeePayrollList.splice(index, 1, createEmpData(employeeData._id));
+            employeePayrollList.splice(index, 1, employeePayrollObj);
         }
     }else{
         employeePayrollList = [createEmpData()];
@@ -279,6 +282,20 @@ const setTextValue=(id,value)=>{
 function getEmpDataFromLocalStorage() {
     return localStorage.getItem("EmployeePayrollList") ?
         JSON.parse(localStorage.getItem("EmployeePayrollList")) :
-        [];
+        [];      
 }
+const checkName = (name) => {
+    let nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
+    if(!nameRegex.test(name))
+        throw 'Name is Incorrect!';
+}
+
+const checkStartDate = (startDate) => {
+    let now = new Date();
+    if(startDate > now) 
+        throw 'Start Date is a Future Date!';
+    var diff = Math.abs(now.getTime() - startDate.getTime());
+    if(diff / (1000 * 60 * 60 * 24) > 30)
+        throw "Start Date Is Beyond 30 Days!";
+} 	
 
