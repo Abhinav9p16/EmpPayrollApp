@@ -1,3 +1,4 @@
+//home.js
 let isUpdate = false;
 let employeePayrollObj = {};
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -75,9 +76,9 @@ class EmployeePayrollData{
         if(newDate > now) 
             throw "Start Date Is A Future Date!";
         var diff = Math.abs(now.getTime() - newDate.getTime());
-        if(diff / 86400 > 30)
+        if(diff / (1000 * 60 * 60 * 24) > 30)
             throw "Start Date Is A Beyond 30 Days!";
-        this._startDate = newDate;
+        this._startDate = newDate
     }
 
     get notes() {return this._notes}
@@ -100,7 +101,7 @@ const save = (event) => {
         setEmployeePayrollObject();
         createAndUpdateStorage();
         resetForm();
-        window.location.replace(site_properties.home_page);
+        window.location.replace(empProperties.home_page);
     }catch(exception){
         console.error(exception);
         return;
@@ -188,7 +189,13 @@ function getCheckBoxValue(boxes) {
     }
     return boxlist;
 }
-
+function getRadioValue(radios) {
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            return radios[i].value;
+        }
+    }
+}
 const checkForUpdate = () => {
     const employeePayrollJson = localStorage.getItem('editEmp');
     isUpdate = employeePayrollJson ? true : false;
@@ -207,8 +214,8 @@ const setForm = () => {
     setTextValue('.salary-output',employeePayrollObj._salary);
     setValue('#notes',employeePayrollObj._notes);
     let date = employeePayrollObj._startDate.toString().slice(0,10).split("-");
-    setValue('#day',Number.parseInt(date[2]) + 1);
-    setValue('#month',Number.parseInt(date[1]) - 1);
+    setValue('#day', (Number.parseInt(date[2]) + 1) % 31);
+    setValue('#month', date[1]);
     setValue('#year',date[0]);
 }
 
@@ -225,6 +232,7 @@ const resetForm = () => {
     setSelectedIndex('#day', 0);
     setSelectedIndex('#month', 0);
     setSelectedIndex('#year', 0);
+    localStorage.removeItem('editEmp');
 }
 
 const unsetSelectedValue = (propertyValue) => {

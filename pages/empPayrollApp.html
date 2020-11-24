@@ -6,7 +6,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="../css/empPayrollApp.css" rel="stylesheet">
   <title>Employee Payroll App</title>
-  <script defer src="../js/empPayrollApp.js"></script>
 </head>
 <body>
   <!-- UC 1 -->
@@ -19,29 +18,24 @@
       </div>
     </div>
   </header>
-<div class="main-content">
-    <!-- UC 2 -->
-    <div class="header-content">
-      <div class="emp-detail-text">
-        Employee Details
-        <div class="emp-count">0</div>
+  <div class="main-content">
+      <!-- UC 2 -->
+      <div class="header-content">
+        <div class="emp-detail-text">
+          Employee Details
+          <div class="emp-count">0</div>
+        </div>
         <a href="../pages/empPayroll.html" class="add-button">
           <img src="../assets/icons/add-24px.svg" alt="">Add User
         </a>
       </div>
     </div>
-  </div>
-  <div class="table-main">
-    <table id = "table-display" class="table"></table>
-</div>
-<script defer src="../js/empPayroll.js"></script>
-<script defer src="../js/empPayrollApp.js"></script>
-<script defer src="../js/empProperties.js"></script>
-<script defer src="../js/empUtility.js"></script>
-<script>
-  function update() {
-    console.log("Edit this entry.");
-  }
-</script>
+    <div class="table-main">
+        <table id = "table-display" class="table"></table>
+    </div>
+    <script defer src="../js/empPayrollApp.js"></script>
+    <script defer src="../js/empUtility.js"></script>
+    <script defer src="../js/empProperties.js"></script>
+    <script defer src="../js/empPayroll.js"></script>
 </body>
 </html>
